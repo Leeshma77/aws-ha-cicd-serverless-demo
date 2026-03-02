@@ -10,8 +10,8 @@ const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 
 const REGION = process.env.AWS_REGION || process.env.AWS_DEFAULT_REGION || 'ap-south-1';
-const UPLOAD_BUCKET = process.env.UPLOAD_BUCKET;            // set via EC2 user data or scripts
-const DDB_TABLE = process.env.DDB_TABLE || 'FileMetadata';  // same table used by Lambda
+const apps-uploads-bucket = process.env.apps-uploads-bucket;            // set via EC2 user data or scripts
+const FileMetadata = process.env.FileMetadata || 'FileMetadata';  // same table used by Lambda
 
 const s3 = new S3Client({ region: REGION });
 const ddb = DynamoDBDocumentClient.from(new DynamoDBClient({ region: REGION }));
@@ -24,7 +24,7 @@ app.get('/health', (_req, res) => res.status(200).send('OK'));
 
 app.get('/files', async (_req, res) => {
   try {
-    const data = await ddb.send(new ScanCommand({ TableName: DDB_TABLE, Limit: 100 }));
+    const data = await ddb.send(new ScanCommand({ TableName: FileMetadata, Limit: 100 }));
     res.status(200).json({ count: (data.Items || []).length, items: data.Items || [] });
   } catch (e) {
     console.error(e);
@@ -34,12 +34,12 @@ app.get('/files', async (_req, res) => {
 
 app.post('/upload', upload.single('file'), async (req, res) => {
   try {
-    if (!UPLOAD_BUCKET) return res.status(500).send('UPLOAD_BUCKET not configured');
+    if (!apps-uploads-bucket) return res.status(500).send('apps-uploads-bucket not configured');
     const file = req.file;
     if (!file) return res.status(400).send('No file provided');
     const key = `${Date.now()}_${file.originalname}`;
     await s3.send(new PutObjectCommand({
-      Bucket: UPLOAD_BUCKET,
+      Bucket: apps-uploads-bucket,
       Key: key,
       Body: file.buffer,
       ContentType: file.mimetype
