@@ -14,7 +14,7 @@ def handler(event, context):
         head   = s3.head_object(Bucket=bucket, Key=key)
         item = {
             'filename': key,
-            'bucket': bucket,
+            'bucket': apps-uploads-bucket,
             'size': head['ContentLength'],
             'contentType': head.get('ContentType', 'unknown'),
             'etag': head.get('ETag', '').strip('"'),
