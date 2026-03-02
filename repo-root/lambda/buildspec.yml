@@ -1,0 +1,14 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo "Pre-build checks"
+  build:
+    commands:
+      - echo "Packaging web app for CodeDeploy"
+  post_build:
+    commands:
+      - zip -r deploy.zip app scripts appspec.yml
+artifacts:
+  files:
+    - deploy.zip
