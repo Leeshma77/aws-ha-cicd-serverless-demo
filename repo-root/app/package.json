@@ -1,0 +1,17 @@
+{
+  "name": "aws-ha-cicd-serverless-combined",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"(add tests here)\" && exit 0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.614.0",
+    "@aws-sdk/client-s3": "^3.614.0",
+    "@aws-sdk/lib-dynamodb": "^3.614.0",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1"
+  }
+}
